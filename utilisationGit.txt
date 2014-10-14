@@ -13,7 +13,8 @@
 
 
 2. Se mettre à jour avec données en ligne : 
-	- git pull
+	- git fetch aliasdepotdeReference
+	- git merge aliasdepotdeReference/master
 
 3. Modifier son dépôt en ligne :
 	- git add nomFichier1 nomFichier2 //Tous les fichier à envoyer

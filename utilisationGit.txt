@@ -1,0 +1,25 @@
+1. Ajout au projet Git : 
+	- cliquer sur le lien mis sur facebook (https://github.com/Gouga34/ProjetPokemonBD.git)
+	- cliquer sur bouton fork (en haut à droite)
+	- sur son pc, sur terminal : se mettre dans le dossier où on mettra le code
+	- taper la commande : git clone urldepotperso sousdossierdanslequelseraleprojet/ 
+					(!!!!! urldepotperso correspond à votre dépot, pas https://github.com/Gouga34/ProjetPokemonBD.git)
+	- sur terminal : cd sousdossierdanslequelseraleprojet/
+	- sur terminal : git remote add aliasdepotdeReference https://github.com/Gouga34/ProjetPokemonBD.git
+	- sur terminal : git remote -v (pour vérif qu'il y a les lignes : 
+								origin adrDepotPerso 
+								aliasdepotdeReference https://github.com/Gouga34/ProjetPokemonBD.git )
+	
+
+
+2. Se mettre à jour avec données en ligne : 
+	- git pull
+
+3. Modifier son dépôt en ligne :
+	- git add nomFichier1 nomFichier2 //Tous les fichier à envoyer
+	- git commit	
+	- git push origin master //la branche dans laquelle on sera. Par défaut master
+
+
+3. Demander au chef de projet d'intégrer les modifs effectuées sur son propre dépôt : 
+	- sur le dépot en ligne : pull request 

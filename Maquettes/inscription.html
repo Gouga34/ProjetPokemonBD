@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thesaurus Creator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="design.css" rel=stylesheet type="text/css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Thesaurus Creator</a>
+			</div>
+		</div>
+	</nav>
+
+    <div id="container">
+    	
+    	<div class="form-signin-heading">
+    		<h3>Create a Thesaurus Creator Account :</h3>
+    	</div>
+    	
+    	<div class="modal-body">
+    		<form class="form-horizontal" method="POST" action="subscribe_check">
+    			
+    			<div class="form-group">
+    				<label for="nomUser" class="col-sm-2 control-label">Nom :</label> 
+    				<div id="contenerInputNomUser" class = "col-sm-3 has-error has-feedback"> 
+    					<input class="form-control" id="nomUser" type="text" name="" placeholder="Nom" required>
+    					<span id="SpanNomUser"class="glyphicon glyphicon-remove form-control-feedback"></span>
+    				</div>
+    			</div>
+    			
+    			<div class="form-group">
+    				<label for="prenomUser" class="col-sm-2 control-label">Prénom :</label> 
+    				<div id="contenerInputPrenomUser" class = "col-sm-3 has-error has-feedback">
+    					<input class="form-control" id="prenomUser" type="text" name="" placeholder="Prénom" required>
+    					<span id="SpanPrenomUser"class="glyphicon glyphicon-remove form-control-feedback"></span>
+    				</div>
+    			</div>
+    			
+    			<div class="form-group">
+    				<label for="emailUser" class="col-sm-2 control-label">Email :</label> 
+    				<div id="contenerInputEmailUser" class = "col-sm-3 has-error has-feedback">
+    					<input class="form-control" id="emailUser" type="email" name="" placeholder="Email" required>
+    					<span id="SpanEmailUser"class="glyphicon glyphicon-remove form-control-feedback"></span>
+    				</div>
+    			</div>
+    			
+    			<div class="form-group">
+    				<label for="confirmEmailUser" class="col-sm-2 control-label">Confirmer Email :</label> 
+    				<div id="contenerInputConfirmEmailUser" class = "col-sm-3 has-error has-feedback">
+    					<input class="form-control" id="confirmEmailUser" type="email" name="" placeholder="Vérification de l'email" required> 
+    					<span id="SpanConfirmEmailUser"class="glyphicon glyphicon-remove form-control-feedback"></span>
+    				</div>
+    			</div>
+
+    			<div class="form-group">
+    				<label for="passwordUser" class="col-sm-2 control-label">Mot de passe :</label> 
+    				<div id="contenerInputPasswordUser" class = "col-sm-3 has-error has-feedback">
+    					<input class="form-control" id="passwordUser" type="password" name="" placeholder="Mot de passe" required> 
+    					<span id="SpanPasswordUser"class="glyphicon glyphicon-remove form-control-feedback"></span>
+    				</div>
+    			</div>
+    			
+    			<div class="form-group">
+    				<label for="confirmPasswordUser" class="col-sm-2 control-label">Confirmer mot de passe:</label> 
+    				<div id="contenerInputConfirmPasswordUser" class = "col-sm-3 has-error has-feedback">
+    					<input class="form-control" id="confirmPasswordUser" type="password" name="" placeholder="Vérification du mot de passe" required> 
+    					<span id="SpanConfirmPasswordUser"class="glyphicon glyphicon-remove form-control-feedback"></span>
+    				</div>
+    			</div>
+    			
+    			<div class="form-group">
+    				<div class = "col-sm-1"></div>
+    				<button type="submit" class="btn btn-primary">Valider</button>
+    				<a class="btn btn-danger" href="index">Retour</a>
+    			</div>
+    		</form>
+    	</div>
+
+
+
+</body>
+</html>
+    	<script type="text/javascript">
+    	
+    	$("#nomUser").keyup(function() {
+    		
+    		var clas = $("#contenerInputNomUser").prop('class');	
+    		var val = $("#nomUser").val();
+    		
+    		if(val.length > 0)
+    		{
+    			if(clas == "col-sm-3 has-error has-feedback")
+    			{	
+    				$("#contenerInputNomUser").prop('class','col-sm-3 has-success has-feedback');	
+    				$("#SpanNomUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    			}
+    		}
+    		else
+    		{
+    			if(clas == "col-sm-3 has-success has-feedback")
+    			{
+    				$("#contenerInputNomUser").prop('class','col-sm-3 has-error has-feedback');
+    				$("#SpanNomUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    			}
+    		}
+    		
+    	});
+    	
+    	$("#prenomUser").keyup(function() {
+    		
+    		var clas = $("#contenerInputPrenomUser").prop('class');	
+    		var val = $("#prenomUser").val();
+    		
+    		if(val.length > 0)
+    		{
+    			if(clas == "col-sm-3 has-error has-feedback")
+    			{	
+    				$("#contenerInputPrenomUser").prop('class','col-sm-3 has-success has-feedback');	
+    				$("#SpanPrenomUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    			}
+    		}
+    		else
+    		{
+    			if(clas == "col-sm-3 has-success has-feedback")
+    			{
+    				$("#contenerInputPrenomUser").prop('class','col-sm-3 has-error has-feedback');
+    				$("#SpanPrenomUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    			}
+    		}
+    		
+    	});
+    	
+    	$("#passwordUser").keyup(function() {
+    		var clas = $("#contenerInputPasswordUser").prop('class');	
+    		var clas2 = $("#contenerInputConfirmPasswordUser").prop('class');
+    		var val = $("#passwordUser").val();
+    		var val2 = $("#confirmPasswordUser").val();
+
+    		if(val.length > 0)
+    		{
+    			if(clas == "col-sm-3 has-error has-feedback")
+    			{
+    				$("#contenerInputPasswordUser").prop('class','col-sm-3 has-success has-feedback');
+    				$("#SpanPasswordUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    			}
+    			else
+    			{
+    				if(val == val2)
+    				{
+    					if(clas2 == "col-sm-3 has-error has-feedback")
+    					{
+    						$("#contenerInputConfirmPasswordUser").prop('class','col-sm-3 has-success has-feedback');	
+    						$("#SpanConfirmPasswordUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    					}
+    				}
+    				else
+    				{
+    					$("#contenerInputConfirmPasswordUser").prop('class','col-sm-3 has-error has-feedback');
+    					$("#SpanConfirmPasswordUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    				}
+    			}
+    		}
+    		else
+    		{
+    			if(clas == "col-sm-3 has-success has-feedback")
+    			{
+    				$("#contenerInputPasswordUser").prop('class','col-sm-3 has-error has-feedback');
+    				$("#SpanPasswordUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    				$("#contenerInputConfirmPasswordUser").prop('class','col-sm-3 has-error has-feedback');
+    				$("#SpanConfirmPasswordUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    			}
+    		}
+    	});
+    
+    $("#confirmPasswordUser").keyup(function() {
+    	var clas = $("#contenerInputConfirmPasswordUser").prop('class');	
+    	var val1 = $("#passwordUser").val();
+    	var val2 = $("#confirmPasswordUser").val();
+
+    	if((val2.length > 0) && (val1 == val2))
+    	{
+    		
+    		if(clas == "col-sm-3 has-error has-feedback")
+    		{
+    			$("#contenerInputConfirmPasswordUser").prop('class','col-sm-3 has-success has-feedback');	
+    			$("#SpanConfirmPasswordUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    		}
+    	}
+    	else
+    	{
+    		if(clas == "col-sm-3 has-success has-feedback")
+    		{
+    			$("#contenerInputConfirmPasswordUser").prop('class','col-sm-3 has-error has-feedback');
+    			$("#SpanConfirmPasswordUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    		}	
+    	}
+    });
+    
+    $("#confirmEmailUser").keyup(function() {
+    	var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,20})?$/;
+    	var clas = $("#contenerInputConfirmEmailUser").prop('class');	
+    	var val1 = $("#emailUser").val();
+    	var val2 = $("#confirmEmailUser").val();
+
+    	if((val2.length > 0) && (val1 == val2) && (emailReg.test(val2)))
+    	{
+    		if(clas == "col-sm-3 has-error has-feedback")
+    		{
+    			$("#contenerInputConfirmEmailUser").prop('class','col-sm-3 has-success has-feedback');
+    			$("#SpanConfirmEmailUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    		}
+    	}
+    	else
+    	{
+    		if(clas == "col-sm-3 has-success has-feedback")
+    		{
+    			$("#contenerInputConfirmEmailUser").prop('class','col-sm-3 has-error has-feedback');
+    			$("#SpanConfirmEmailUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    		}
+    	}
+    });
+    
+    $("#emailUser").keyup(function() {
+    	var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,20})?$/;
+    	var clas = $("#contenerInputEmailUser").prop('class');
+    	var clas2 = $("#contenerInputConfirmEmailUser").prop('class');	
+    	var val = $("#emailUser").val();
+    	var val2 = $("#confirmEmailUser").val();
+
+    	if((val.length > 0) && (emailReg.test(val)))
+    	{
+    		if(clas == "col-sm-3 has-error has-feedback")
+    		{	
+    			$("#contenerInputEmailUser").prop('class','col-sm-3 has-success has-feedback');
+    			$("#SpanEmailUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    		}
+    		else 
+    		{
+    			if (val == val2)
+    			{
+    				if(clas2 == "col-sm-3 has-error has-feedback")
+    				{
+    					$("#contenerInputConfirmEmailUser").prop('class','col-sm-3 has-success has-feedback');
+    					$("#SpanConfirmEmailUser").prop('class','glyphicon glyphicon-ok form-control-feedback');
+    				}
+    			}
+    			else
+    			{
+    				$("#contenerInputConfirmEmailUser").prop('class','col-sm-3 has-error has-feedback');
+    				$("#SpanConfirmEmailUser").prop('class','glyphicon glyphicon-remove form-control-feedback');	
+    			}
+    		}
+    	}
+    	else
+    	{
+    		if(clas == "col-sm-3 has-success has-feedback")
+    		{
+    			$("#contenerInputEmailUser").prop('class','col-sm-3 has-error has-feedback');
+    			$("#SpanEmailUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    			$("#contenerInputConfirmEmailUser").prop('class','col-sm-3 has-error has-feedback');
+    			$("#SpanConfirmEmailUser").prop('class','glyphicon glyphicon-remove form-control-feedback');
+    		}
+    	}
+    });
+
+    </script>
+
+
+
+
+</body>
+</html>

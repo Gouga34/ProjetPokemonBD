@@ -6,10 +6,17 @@ class Utilisateur
 	attribute enum typeutil {utilisateur, admin} type;
 	
 	relationship Set<Terme> possede inverse Terme::estPossedePar;
-	relationship Set<Concept> possde inverse Concept::estPossedePar;
+	relationship Set<Concept> possede inverse Concept::estPossedePar;
+	relationship Set<Synonyme> possede inverse Synonyme::estPossedePar;
 	
-	void creerConcept();
-	void creerTerme();
+	void creerConcept(in Vedette v);
+	void creerTerme(in Terme termeParent);
+	void creerSynonyme(in Vedette v);
+	
+	void supprimerConcept(in Concept c);
+	void supprimerTerme(in Terme t);
+	void supprimerSynonyme(in Synonyme s);
+	
 	void supprimerCompte();
 };
 
@@ -24,22 +31,37 @@ class Concept
 	void ajouter(in Terme t);
 	bool trouver(in Terme t);
 	void retirer(in Terme t);
+	void modifierDescription(in String desc);
 };
 
 Interface Terme{
-	attribute nomTerme;
-	attribute description;
+
+	attribute string nomTerme;
+	attribute string description;
+	
 	relationship Set<Terme> estParent inverse aPourParent;
 	relationship Set<Terme> aPourParent inverse estParent;
 	relationship Utilisateur estPossedePar inverse Utilisateur::possede;
+	
+	void modifierDescription(in string desc);
+	void modifierParent(in Terme t);
+	Set<Terme> avoirFils();
 };
 
 class Vedette:Terme (extent Vedettes key nomTerme){
+	
 	relationship Set<Synonyme> aPourSynonyme inverse Synonyme::estSynonyme;
 	relationship Set<Concept> designe inverse Concept::estDesigne;
+	
 };
 
 class Synonyme{
-	attribute nom;
-	relationship Vedette estDesigne inverse Vedette::designe;
+
+	attribute string synonyme;
+	
+	relationship Vedette estSynonyme inverse Vedette::aPourSynonyme;
+	relationship Utilisateur estPossedePar inverse Utilisateur::possede;
+	
+	void modifierVedette(in Vedette v);
+	
 };

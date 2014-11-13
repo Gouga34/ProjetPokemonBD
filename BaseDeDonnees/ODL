@@ -1,0 +1,45 @@
+class Utilisateur
+{
+	attribute string login;
+	attribute string mdp;
+	attribute string mail;
+	attribute enum typeutil {utilisateur, admin} type;
+	
+	relationship Set<Terme> possede inverse Terme::estPossedePar;
+	relationship Set<Concept> possde inverse Concept::estPossedePar;
+	
+	void creerConcept();
+	void creerTerme();
+	void supprimerCompte();
+};
+
+class Concept
+{
+	attribute string nomConcept;
+	attribute string description;
+	
+	relationship Utilisateur estPossedePar inverse Utilisateur::possede;
+	relationship Vedette estDesigne inverse Vedette::designe;
+	
+	void ajouter(in Terme t);
+	bool trouver(in Terme t);
+	void retirer(in Terme t);
+};
+
+Interface Terme{
+	attribute nomTerme;
+	attribute description;
+	relationship Set<Terme> estParent inverse aPourParent;
+	relationship Set<Terme> aPourParent inverse estParent;
+	relationship Utilisateur estPossedePar inverse Utilisateur::possede;
+};
+
+class Vedette:Terme (extent Vedettes key nomTerme){
+	relationship Set<Synonyme> aPourSynonyme inverse Synonyme::estSynonyme;
+	relationship Set<Concept> designe inverse Concept::estDesigne;
+};
+
+class Synonyme{
+	attribute nom;
+	relationship Vedette estDesigne inverse Vedette::designe;
+};

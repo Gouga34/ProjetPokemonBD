@@ -50,7 +50,8 @@ create type Concept_t as Object
 	nomConcept VARCHAR(30),
 	description VARCHAR(200),
 	fils GroupeConcept_t,
-	parents GroupeConcept_t
+	parents GroupeConcept_t,
+	vedette TermeVedette_t
 );
 /
 
@@ -71,6 +72,12 @@ create or replace type Utilisateur_t as Object /*type utilisateur surement inuti
 
 /*Création des tables***************************************************************************************/
 
+create table Synonyme of Synonyme_t
+(
+	constraint cp_synonyme primary key (idSynonyme),
+	constraint notN_nomSynonyme check (nomSynonyme IS NOT NULL)
+);
+
 create table TermeVedette of TermeVedette_t
 (
 	constraint cp_termeVedette primary key (idTerme),
@@ -83,7 +90,8 @@ create table Concept of Concept_t
 	constraint cp_concept primary key (idConcept),
 	/*constraint autoin_concept AUTO_INCREMENT (idConcept),*/
 	constraint notN_nomConcept check (nomConcept IS NOT NULL),
-	constraint notN_description check (description IS NOT NULL)
+	constraint notN_description check (description IS NOT NULL),
+	constraint notN_vedette check (vedette IS NOT NULL)
 )
 nested table fils store as listeFilsConcept,
 nested table parents store as listeParentsConcept

@@ -1,9 +1,11 @@
 
+
 drop table Utilisateur;
 drop table Concept;
 drop table TermeVedette;
+drop table Synonyme;
 drop type Utilisateur_t;
-drop type Concept_t;
+drop type Concept_t force;
 drop type GroupeTerme_t;
 drop type TermeVedette_t;
 drop type GroupeConcept_t;
@@ -44,7 +46,7 @@ create  type GroupeConcept_t as table of ref Concept_t;
 /
 
 
-create type Concept_t as Object
+create or replace type Concept_t as Object
 (
 	idConcept int,
 	nomConcept VARCHAR(30),
@@ -58,7 +60,7 @@ create type Concept_t as Object
 create or replace type Utilisateur_t as Object /*type utilisateur surement inutile*/
 (
 	login VARCHAR(30),
-	mdp VARCHAR(30),
+	mdp VARCHAR(100),
 	mail VARCHAR(50),
 	admin number(1), /*0 : utilisateur 1 : admin*/
 	concepts GroupeConcept_t,
@@ -94,7 +96,8 @@ create table Concept of Concept_t
 	constraint notN_vedette check (vedette IS NOT NULL)
 )
 nested table fils store as listeFilsConcept,
-nested table parents store as listeParentsConcept
+nested table parents store as listeParentsConcept,
+nested table vedette.synonymes store as listeSynonymesTermeConcept
 ;
 
 create table Utilisateur of Utilisateur_t
@@ -112,3 +115,6 @@ nested table concepts store as listeConceptsUtilisateur,
 nested table synonymes store as listeSynonymesUtilisateur,
 nested table termes store as listeTermesUtilisateur 
 ;
+
+
+

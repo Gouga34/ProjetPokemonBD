@@ -53,7 +53,7 @@ create or replace type Concept_t as Object
 	description VARCHAR(200),
 	fils GroupeConcept_t,
 	parents GroupeConcept_t,
-	vedette TermeVedette_t
+	vedette REF TermeVedette_t
 );
 /
 
@@ -96,8 +96,7 @@ create table Concept of Concept_t
 	constraint notN_vedette check (vedette IS NOT NULL)
 )
 nested table fils store as listeFilsConcept,
-nested table parents store as listeParentsConcept,
-nested table vedette.synonymes store as listeSynonymesTermeConcept
+nested table parents store as listeParentsConcept
 ;
 
 create table Utilisateur of Utilisateur_t

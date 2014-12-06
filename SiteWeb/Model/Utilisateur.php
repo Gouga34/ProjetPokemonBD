@@ -107,8 +107,6 @@ class Utilisateur
     */
     public function creerSynonyme($nomSynonyme, $vedette)
     {
-        // Modifier le tableau de synonyme du terme associé
-
         $pdo = ConnexionBD::getPDO();
         $query = "INSERT INTO Synonyme (idSynonyme, nomSynonyme) VALUES (idSynonyme,'$nomSynonyme');";
         $pdo->query($query);

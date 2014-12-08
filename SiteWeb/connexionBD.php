@@ -1,14 +1,28 @@
 <?php
+
 	class ConnexionBD{
 		
-		public static function getPDD(){
+		public static function getPDO(){
+		
 			try{
-				$dbc = new PDO('oci:dbname=venus/orcl;charset=CL8MSWIN1251', 'mvidal02', 'louvetea');
+				$tns = "(DESCRIPTION =
+							(ADDRESS_LIST =
+							  (ADDRESS = (PROTOCOL = TCP)(HOST = venus)(PORT = 1521))
+							)
+							(CONNECT_DATA =
+								(SERVICE_NAME = master)
+							)
+						  )";
+						  
+				$db_username = "login";
+				$db_password = "mdp";
+
+				$conn = new PDO("oci:dbname=".$tns,$db_username,$db_password);
 			}
 			catch(Exception $e){
-				die('Erreur : '.$e->getMessage());
+				 echo ($e->getMessage());
 			}
-			return $dbc;
+			return $conn;
 		}
 		
 	}

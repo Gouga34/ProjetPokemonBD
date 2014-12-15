@@ -20,26 +20,32 @@ set linesize 250;
 
 /*creation utilisateur*/ 
     INSERT INTO Utilisateur (login, mdp, mail, admin) VALUES ('$log','$psw','$email','$admn');
-    INSERT INTO Utilisateur (login, mdp, mail, admin) VALUES ('Falindir', '1234', 'toto@gmail.com', 1);
-    INSERT INTO Utilisateur (login, mdp, mail, admin) VALUES ('Manu', '5678', 'titi@gmail.com', 0); 
+    INSERT INTO Utilisateur (login, mdp, mail, admin, concepts, synonymes, termes) VALUES ('Falindir', '1234', 'toto@gmail.com', 1,
+    	GroupeConcept_t(), GroupeSynonyme_t(), GroupeTerme_t());
+    INSERT INTO Utilisateur (login, mdp, mail, admin, concepts, synonymes, termes) VALUES ('Manu', '5678', 'titi@gmail.com', 0,
+    	GroupeConcept_t(), GroupeSynonyme_t(), GroupeTerme_t()); 
 
 
 /*modif utilisateur (admin)*/
     UPDATE Utilisateur SET admin=1 WHERE login='Manu'; 
 
 /*creation termeVedette*/
-    INSERT INTO termeVedette (idTerme, nomTerme, description) VALUES(0,'Gobou','Gobou est un pokemon eau mignon <3');
-    INSERT INTO termeVedette (idTerme, nomTerme, description) VALUES(1,'Entei','Best woofi ever ! <3');
-    insert into termeVedette(idTerme,nomTerme,description) VALUES(2,'Dresseurs','les dresseurs pokemon');
+    INSERT INTO termeVedette (nomTerme, description, synonymes) VALUES('Gobou','Gobou est un pokemon eau mignon <3',
+    																				GroupeSynonyme_t());
+    INSERT INTO termeVedette (nomTerme, description, synonymes) VALUES('Entei','Best woofi ever ! <3',GroupeSynonyme_t());
+    insert into termeVedette (nomTerme,description, synonymes) VALUES('Dresseurs','les dresseurs pokemon',GroupeSynonyme_t());
 
 /*creation synonyme*/
-    INSERT INTO Synonyme (idSynonyme, nomSynonyme) VALUES (0,'Boubou');
-    INSERT INTO Synonyme (idSynonyme, nomSynonyme) VALUES (1'Waf');
+    INSERT INTO Synonyme (nomSynonyme) VALUES ('Boubou');
+    INSERT INTO Synonyme (nomSynonyme) VALUES ('Waf');
 
 /*creation concept*/
-    INSERT INTO Concept (idConcept, nomConcept, description, vedette) VALUES (0, 'Pokemon', 'Un concept pokemon', (select REF(T) from TermeVedette T where idTerme = 0));
-    INSERT INTO Concept (idConcept, nomConcept, description, vedette) VALUES (1, 'Pokemon2', 'Un concept pokemon 2', (select REF(T) from TermeVedette T where idTerme = 1));
-    INSERT INTO Concept (idConcept, nomConcept, description, vedette) VALUES (2, 'Dresseurs', 'Les dresseurs du dessin animé', (select REF(T) from TermeVedette T where idTerme = 2));
+    INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Pokemon', 'Un concept pokemon', (select REF(T) from TermeVedette T where idTerme = 0),
+    																				GroupeConcept_t(), GroupeConcept_t());
+    INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Pokemon2', 'Un concept pokemon 2', (select REF(T) from TermeVedette T where idTerme = 1),
+    																				GroupeConcept_t(), GroupeConcept_t());
+    INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Dresseurs', 'Les dresseurs du dessin animé', (select REF(T) from TermeVedette T where idTerme = 2),
+    																				GroupeConcept_t(), GroupeConcept_t());
     /* Afficher le terme associé au concept */ select c.vedette.nomTerme from Concept c where c.idConcept=0;
     
     /*modification du concept*/
@@ -47,57 +53,36 @@ set linesize 250;
 
 
 
-/*Lier un concept à son possesseur*/
-
-	/* on doit commencer par faire un update pour la première valeur, des insert pour les suivantes */
-	    UPDATE Utilisateur
-	       set concepts = GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.idConcept = 0))
-	     where login = 'Manu';  
+/*Lier un concept à son possesseur*/ 
     
-	    INSERT INTO TABLE (SELECT concepts FROM Utilisateur WHERE login = 'Manu')
-	    VALUES ((SELECT ref(c) FROM Concept c WHERE c.idConcept = 1));
+    INSERT INTO TABLE (SELECT concepts FROM Utilisateur WHERE login = 'Manu')
+    VALUES ((SELECT ref(c) FROM Concept c WHERE c.idConcept = 1));
 
     
     select nomConcept from
     (select u.concepts from Utilisateur u where u.login = 'Manu');
 
 /*Lier un synonyme à son possesseur*/
-    UPDATE Utilisateur
-       set synonymes = GroupeSynonyme_t((SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = 0))
-     where login = 'Manu';  
     
     INSERT INTO TABLE (SELECT Synonymes FROM Utilisateur WHERE login = 'Manu')
-    VALUES ((SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = 1));
+    VALUES ((SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = 0));
       
 /*Lier un terme à son possesseur*/
-	UPDATE Utilisateur
-	   set termes = GroupeTerme_t((SELECT ref(t) FROM TermeVedette t WHERE t.idTerme = 0))
-	 where login = 'Manu'; 
 	    
 	INSERT INTO TABLE (SELECT termes FROM Utilisateur WHERE login = 'Manu')
 	VALUES ((SELECT ref(t) FROM TermeVedette t WHERE t.idTerme = 1));
 
 /*Lier un synonyme à son terme*/
-	UPDATE TermeVedette
-	   set synonymes = GroupeSynonyme_t((SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = 0))
-	 where idTerme = 0;
 	    
 	INSERT INTO TABLE (SELECT synonymes FROM TermeVedette WHERE idTerme = 0)
 	VALUES ((SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = 1));
 
 /*Ajouter un parent à un concept*/
-	UPDATE Concept
-	   set parents = GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.idConcept = 1))
-	 where idConcept = 2;
 	    
 	INSERT INTO TABLE (SELECT parents FROM Concept WHERE idConcept = 2)
 	VALUES ((SELECT ref(c) FROM Concept c WHERE c.idConcept = 0));
 
 /* Lier un concept à son fils */
-
-	UPDATE Concept
-	   set fils = GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.idConcept = 1))
-	 where idConcept = 0;
 	    
 	INSERT INTO TABLE (SELECT fils FROM Concept WHERE idConcept = 0)
 	VALUES ((SELECT ref(c) FROM Concept c WHERE c.idConcept = 0));

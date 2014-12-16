@@ -33,6 +33,7 @@ set linesize 250;
     INSERT INTO termeVedette (nomTerme, description, synonymes) VALUES('Gobou','Gobou est un pokemon eau mignon <3',
     																				GroupeSynonyme_t());
     INSERT INTO termeVedette (nomTerme, description, synonymes) VALUES('Entei','Best woofi ever ! <3',GroupeSynonyme_t());
+    
     insert into termeVedette (nomTerme,description, synonymes) VALUES('Dresseurs','les dresseurs pokemon',GroupeSynonyme_t());
 
 /*creation synonyme*/
@@ -40,15 +41,17 @@ set linesize 250;
     INSERT INTO Synonyme (nomSynonyme) VALUES ('Waf');
 
 /*creation concept*/
-    INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Pokemon', 'Un concept pokemon', (select REF(T) from TermeVedette T where idTerme = 0),
+    INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Pokemon', 'Un concept pokemon', (select REF(T) from TermeVedette T where nomTerme = 'Gobou'),
     																				GroupeConcept_t(), GroupeConcept_t());
-    INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Pokemon2', 'Un concept pokemon 2', (select REF(T) from TermeVedette T where idTerme = 1),
+        INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Test', 'Un concept pokemon', (select REF(T) from TermeVedette T where nomTerme = 'Gobou'),
+    																				GroupeConcept_t(), GroupeConcept_t());																				
+    INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Pokemon2', 'Un concept pokemon 2', (select REF(T) from TermeVedette T where nomTerme = 'Entei'),
     																				GroupeConcept_t(), GroupeConcept_t());
     INSERT INTO Concept (nomConcept, description, vedette, fils, parents) VALUES ('Dresseurs', 'Les dresseurs du dessin animé', (select REF(T) from TermeVedette T where idTerme = 2),
     																				GroupeConcept_t(), GroupeConcept_t());
     /* Afficher le terme associé au concept */ select c.vedette.nomTerme from Concept c where c.idConcept=0;
     
-    /*modification du concept*/
+    /*modification du termeVedette d'un concept*/
     UPDATE Concept SET vedette = (select REF(T) from TermeVedette T where idTerme = 1) WHERE Concept.idConcept=0;
 
 
@@ -79,13 +82,13 @@ set linesize 250;
 
 /*Ajouter un parent à un concept*/
 	    
-	INSERT INTO TABLE (SELECT parents FROM Concept WHERE idConcept = 2)
-	VALUES ((SELECT ref(c) FROM Concept c WHERE c.idConcept = 0));
+	INSERT INTO TABLE (SELECT parents FROM Concept WHERE nomConcept = 'Pokemon2')
+	VALUES ((SELECT ref(c) FROM Concept c WHERE c.nomConcept = 'Pokemon'));
 
 /* Lier un concept à son fils */
 	    
-	INSERT INTO TABLE (SELECT fils FROM Concept WHERE idConcept = 0)
-	VALUES ((SELECT ref(c) FROM Concept c WHERE c.idConcept = 0));
+	INSERT INTO TABLE (SELECT fils FROM Concept WHERE nomConcept = 'Pokemon')
+	VALUES ((SELECT ref(c) FROM Concept c WHERE c.nomConcept = 'Pokemon2'));
     
 /*modif utilisateur(mdp)*/
     UPDATE Utilisateur SET mdp='53' WHERE login='Manu';
@@ -127,10 +130,10 @@ set linesize 250;
 	select deref(value(listeTermes)) from utilisateur u, table(u.termes) listeTermes;
 
 /*avoir les parents d'un concept*/
-	select deref(value(listeParents)) from concept c, table(c.parents) listeParents;
+	select deref(value(listeParents)).nomConcept from concept c, table(c.parents) listeParents WHERE c.nomConcept='Test';
 
 /*avoir les fils d'un concept*/
-	SELECT deref(VALUE(listeFils)) FROM Concept c, TABLE(c.fils) listeFils WHERE c.idConcept = 0;
+	SELECT deref(VALUE(listeFils)) FROM Concept c, TABLE(c.fils) listeFils WHERE c.nomConcept = 'Test';
 
 
 

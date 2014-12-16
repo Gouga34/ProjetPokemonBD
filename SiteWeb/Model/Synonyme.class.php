@@ -7,52 +7,85 @@
 	*/
 	class Synonyme
 	{
-		private $idSynonyme;
 		private $nomSynonyme;
-/**
-* Constructeur
-* @param idSynonyme Identifiant dy synonyme à créer
-*/
-function __construct($idSynonyme)
-{
-	$pdo = ConnexionBD::getPDO();
-// Récupération du synonyme dans le tableau
-	$query = "SELECT deref(VALUE(listeSynonymes))
-	FROM TermeVedette t, TABLE(t.synonymes) listeSynonymes
-	WHERE deref(VALUE(listeSynonymes)).idSynonyme=$idSynonyme;";
-	$res = $pdo->query($query);
-	if ($row = $res->fetch())
-	{
-		$this->idSynonyme = $idSynonyme;
-		$this->nomSynonyme = $row['nomSynonyme'];
+
+		/**
+		 * Constructeur
+		 * @param nomSynonyme Nom du synonyme à créer
+		*/
+		function __construct($nomSynonyme)
+		{
+			$this->nomSynonyme = $nomSynonyme;
+		}
+
+		public function getNom()
+		{
+			return $this->nomSynonyme;
+		}
+
+		/**
+		 * @return Nom de la vedette que le synonyme désigne
+		*/
+		public function getVedette()
+		{
+			$pdo = ConnexionBD::getPDO();
+
+			$query = "SELECT t.nomTerme
+						FROM TermeVedette t, table(t.synonymes) listeSynonymes
+						WHERE VALUE(listeSynonymes) = (SELECT ref(s) FROM Synonyme s WHERE s.nomSynonyme = '".$this->nomSynonyme."')";
+
+			$sth = $pdo->prepare($query);
+			$sth->execute();
+
+			if ($row = $sth->fetch())
+			{
+				return $row['NOMVEDETTE'];
+			}
+
+			return "";
+		}
+
+		/**
+		 * @return login de l'utilisateur qui possède le synonyme
+		*/
+		public function getUtilisateur()
+		{
+			$pdo = ConnexionBD::getPDO();
+
+			$query = "SELECT u.login
+						FROM Utilisateur u, table(u.synonymes) listeSynonymes
+						WHERE VALUE(listeSynonymes) = (SELECT ref(s) FROM Synonyme s WHERE s.nomSynonyme = '".$this->nomSynonyme."')";
+
+			$sth = $pdo->prepare($query);
+			$sth->execute();
+
+			if ($row = $sth->fetch())
+			{
+				return $row['NOMVEDETTE'];
+			}
+
+			return "";
+		}
+
+		/**
+		 * @action Change la vedette associée au synonyme
+		 * @param nomVedette Nom de la vedette associée
+		*/
+		public function modifierVedette($nomVedette)
+		{
+			$pdo = ConnexionBD::getPDO();
+
+			// Suppression dans le tableau de la vedette actuelle (plusieurs vedettes possibles ??)
+			/*$query = "DELETE FROM TABLE (SELECT synonymes FROM TermeVedette) synonyme
+						WHERE VALUE(synonyme) = (SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = $synonyme->getId());";
+			$pdo->query($query);*/
+
+			// Ajout du synonyme pour la nouvelle vedette
+			$query = "INSERT INTO TABLE (SELECT synonymes FROM TermeVedette WHERE nomTerme = '".$nomVedette."')
+						VALUES ((SELECT ref(s) FROM Synonyme s WHERE s.nomSynonyme = '".$nomSynonyme."'));";
+			
+			$sth = $pdo->prepare($query);
+			$sth->execute();
+		}
 	}
-}
-public function getId()
-{
-	return $this->idSynonyme;
-}
-public function getNom()
-{
-	return $this->nomSynonyme;
-}
-/**
-* @action Change la vedette associée au synonyme
-* @param vedette Nouvelle vedette associée
-*/
-public function modifierVedette($vedette)
-{
-	$pdo = ConnexionBD::getPDO();
-// Suppression dans le tableau de la vedette actuelle (plusieurs vedettes possibles ??)
-	$query = "DELETE FROM TABLE (SELECT synonymes FROM TermeVedette) synonyme
-	WHERE VALUE(synonyme) = (SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = $synonyme->getId());";
-	$pdo->query($query);
-// Ajout du synonyme pour la nouvelle vedette
-	$query = "UPDATE TermeVedette
-	set synonymes = GroupeSynonyme_t((SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = $idSynonyme))
-	where idTerme = $vedette->getId();";
-	$query2 = "INSERT INTO TABLE (SELECT synonymes FROM TermeVedette WHERE idTerme = $vedette->getId())
-	VALUES ((SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = $idSynonyme));";
-	$pdo->query($query);
-}
-}
 ?>

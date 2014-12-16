@@ -216,13 +216,13 @@
 		 * @param description Description
 		 * @param parent Parent du concept créé
 		*/
-		public function creerConcept($nomConcept, $description, $parent, $vedette)
+		public function creerConcept($nomConcept, $description, $nomParent, $nomTerme)
 		{
 			$pdo = ConnexionBD::getPDO();
 
-			$query = "INSERT INTO Concept (nomConcept, description, vedette, parents, fils) VALUES ('".$nomConcept."', .'"$description."',
-						(select REF(T) from TermeVedette T where nomTerme = ".$vedette->getNom()."),
-						GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.nomConcept = ".$parent->getNom().")),
+			$query = "INSERT INTO Concept (nomConcept, description, vedette, parents, fils) VALUES ('".$nomConcept."', '".$description."',
+						(select REF(T) from TermeVedette T where nomTerme = ".$nomTerme."),
+						GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.nomConcept = ".$nomParent.")),
 						GroupeConcept_t())";
 			
 			$sth = $pdo->prepare($query);
@@ -231,7 +231,7 @@
 
 			// Insertion du concept dans les fils du parent
 
-			$query = "INSERT INTO TABLE (SELECT fils FROM Concept WHERE nomConcept = '".$parent->getNom()."')
+			$query = "INSERT INTO TABLE (SELECT fils FROM Concept WHERE nomConcept = '".$nomParent."')
 						VALUES ((SELECT ref(c) FROM Concept c WHERE c.nomConcept = '".$nomConcept."'))";
 
 			$sth = $pdo->prepare($query);
@@ -276,7 +276,7 @@
 		 * @param nomSynonyme Nom du synonyme
 		 * @param vedette Terme vedette lié au synonyme
 		*/
-		public function creerSynonyme($nomSynonyme, $vedette)
+		public function creerSynonyme($nomSynonyme, $nomTerme)
 		{
 			$pdo = ConnexionBD::getPDO();
 			
@@ -287,7 +287,7 @@
 
 			// Insertion du synonyme dans la table Vedette
 
-			$query = "INSERT INTO TABLE (SELECT synonymes FROM TermeVedette WHERE nomTerme = $vedette->getNom())
+			$query = "INSERT INTO TABLE (SELECT synonymes FROM TermeVedette WHERE nomTerme = '".$nomTerme."')
 						VALUES ((SELECT ref(s) FROM Synonyme s WHERE s.nomSynonyme = '".$nomSynonyme."'))";
 			
 			$sth = $pdo->prepare($query);
@@ -338,7 +338,7 @@
 			$sth->execute();
 			
 			// Suppression du terme vedette associé
-			$sth = $pdo->prepare("SELECT DEREF(vedette).nomTerme FROM Concept WHERE nomConcept = '".$nomConcept."'";
+			$sth = $pdo->prepare("SELECT DEREF(vedette).nomTerme FROM Concept WHERE nomConcept = '".$nomConcept."'");
 			$sth->execute();
 
 			if ($row = $sth->fetch()) {

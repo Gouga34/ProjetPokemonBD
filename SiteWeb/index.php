@@ -16,7 +16,7 @@
 	require_once('./connexionBD.php');
 	//require_once('./Model/synonyme.php');
 	require_once('./Model/Concept.class.php');
-	//require_once('./Model/termeVedette.php');
+	require_once('./Model/TermeVedette.class.php');
 	
 	require_once('./Model/Utilisateur.class.php');
 

@@ -1,10 +1,17 @@
 <?php
 
-	/**
-	*
-	* @author Morgane Vidal 
-	*
-	*/
+/*========================================================================
+Nom: Concept.class.php           Auteur: Morgane Vidal 
+
+				
+Maj:  17/12/2014         Creation: 25/11/2014
+Projet de base de données avancées
+--------------------------------------------------------------------------
+Specification:
+Ce fichier contient l'implémentation des fonctions 
+permettant de traiter la table Concept.
+=========================================================================*/
+
 	class Concept{
 			private $nomConcept;
 			private $description;
@@ -91,8 +98,6 @@
 		*/
 		function ajouterParent($nomConceptParent){
 			$pdo=ConnexionBD::getPDO();
-			//var_dump($this->nomConcept);
-			//echo $this->nomConcept;
 			$req="INSERT INTO TABLE (SELECT parents FROM Concept WHERE nomConcept ='".$this->nomConcept."') VALUES ((SELECT ref(c) FROM Concept c WHERE nomConcept='".$nomConceptParent."'))";
 			$concept=new Concept($nomConcept);
 			$res=$pdo->prepare($req);
@@ -108,7 +113,19 @@
 			$res=$pdo->prepare($req);
 			$res->execute();
 		}
+		
+		function trouverDansArbo($nomTerme){
+			$pdo=ConnexionBD::getPDO();
+			
+			$req="select nomConcept from concept where vedette = (select REF(t) FROM TermeVedette t WHERE t.nomTerme='".$nomTerme."')";
+			//echo $req;
+			$res=$pdo->prepare($req);
+			$res->execute();
+			$row=$res->fetchAll();
+			return $row;		
+		}
 }
 	
+
 ?>
 

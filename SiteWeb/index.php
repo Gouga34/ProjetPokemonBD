@@ -14,9 +14,8 @@
 	//session_destroy();
 	//Appel du fichier permettant la connexion à la BD
 	require_once('./connexionBD.php');
-	//require_once('./Model/utilisateur.php');
 	//require_once('./Model/synonyme.php');
-	//require_once('./Model/concept.php');
+	require_once('./Model/Concept.class.php');
 	//require_once('./Model/termeVedette.php');
 	
 	require_once('./Model/Utilisateur.class.php');

@@ -5,10 +5,11 @@
 
 	$u = new Utilisateur($_SESSION['login']);
 
-	// On supprime le concept associée qui va supprimer le synonyme
-	$u->supprimerConcept($_POST['nomTerme']);
+	// On supprime le terme qui va supprimer le concept associé et les synonymes
+	$u->supprimerTerme($_POST['nomTerme']);
 
 	include_once('../View/termeSupprime.php');
 	
 	// Footer
 ?>
+

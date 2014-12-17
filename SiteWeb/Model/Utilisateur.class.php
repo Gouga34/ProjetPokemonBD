@@ -33,8 +33,7 @@
 
 			$ssh = $pdo->prepare($query);
 			$ssh->execute();
-
-
+			
 			if ($row = $ssh->fetch())
 			{
 				$this->login = $login;
@@ -236,7 +235,7 @@
 		public function creerConcept($nomConcept, $description, $nomParent, $nomTerme)
 		{
 			$pdo = ConnexionBD::getPDO();
-
+			
 			if (empty($nomParent)){
 				$query = "INSERT INTO Concept (nomConcept, description, vedette, parents, fils) VALUES ('".$nomConcept."', '".$description."',
 						(select REF(t) from TermeVedette t where t.nomTerme = '".$nomTerme."'),
@@ -250,7 +249,7 @@
 						GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.nomConcept = '".$nomParent."')),
 						GroupeConcept_t())";
 			}
-			
+
 			$sth = $pdo->prepare($query);
 			$sth->execute();
 
@@ -299,10 +298,13 @@
 			$sth->execute();
 			
 			$nomConcept = "Concept".$nomTerme;
-			$nomConceptParent = "Concept".$nomParent;
+			
+			if (!empty($nomParent)){
+				$nomConceptParent = "Concept".$nomParent;
+			}
 			
 			// On créé automatiquement le concept associé
-			//creerConcept($nomConcept, $description, $nomConceptParent, $nomTerme);
+			$this->creerConcept($nomConcept, $description, $nomConceptParent, $nomTerme);
 		}
 
 		/**
@@ -359,14 +361,14 @@
 			$sth->execute();
 			
 			// Suppression du conept dans la table utilisateur
-			$query = "DELETE FROM TABLE (SELECT concepts FROM Utilisateur) tabConcepts
+			$query = "DELETE FROM TABLE (SELECT concepts FROM Utilisateur WHERE login = '".$this->login."') tabConcepts
 						WHERE VALUE(tabConcepts) = (SELECT ref(c) FROM Concept c WHERE c.nomConcept = '".$nomConcept."')";
 			
 			$sth = $pdo->prepare($query);
 			$sth->execute();
 		
 			// Suppression du concept
-			$query = "DELETE FROM Concept WHERE nomConcept = '".$concept->getNom()."'";
+			$query = "DELETE FROM Concept WHERE nomConcept = '".$nomConcept."'";
 			
 			$sth = $pdo->prepare($query);
 			$sth->execute();
@@ -382,8 +384,8 @@
 			
 			// Suppression du conept dans la table utilisateur
 
-			$query = "DELETE FROM TABLE (SELECT termes FROM Utilisateur) tabTermes
-						WHERE VALUE(tabTermes) = (SELECT ref(t) FROM TermeVedette t WHERE t.nomTerme = '".$nomTerme."'";
+			$query = "DELETE FROM TABLE (SELECT termes FROM Utilisateur WHERE login = '".$this->login."') tabTermes
+						WHERE VALUE(tabTermes) = (SELECT ref(t) FROM TermeVedette t WHERE t.nomTerme = '".$nomTerme."')";
 
 			$sth = $pdo->prepare($query);
 			$sth->execute();
@@ -400,7 +402,7 @@
 			// On les supprime
 			while ($row = $sth->fetch())
 			{
-				supprimerSynonyme($row['DEREF(VALUE(LISTESYNONYMES)).NOMSYNONYME']);
+				$this->supprimerSynonyme($row['DEREF(VALUE(LISTESYNONYMES)).NOMSYNONYME']);
 			}
 			
 			
@@ -412,12 +414,12 @@
 
 			if ($row = $sth->fetch()) {
 				$nomConcept = $row['NOMCONCEPT'];
-				supprimerConcept($nomConcept);
+				$this->supprimerConcept($nomConcept);
 			}
 
-			$query = "DELETE FROM TermeVedette WHERE nomTerme = '".$nomTerme;"'";
+			$query = "DELETE FROM TermeVedette WHERE nomTerme = '".$nomTerme."'";
 			$sth = $pdo->prepare($query);
-			$sth->execute();			
+			$sth->execute();
 		}
 
 		/**
@@ -430,7 +432,7 @@
 
 		 	// Suppression du synonyme dans la table utilisateur
 
-			$query = "DELETE FROM TABLE (SELECT synonymes FROM Utilisateur) tabSynonymes
+			$query = "DELETE FROM TABLE (SELECT synonymes FROM Utilisateur WHERE login = '".$this->login."') tabSynonymes
 						WHERE VALUE(tabSynonymes) = (SELECT ref(s) FROM Synonyme s WHERE s.nomSynonyme = '".$nomSynonyme."'";
 
 			$sth = $pdo->prepare($query);
@@ -462,7 +464,7 @@
 
 			$sth = $pdo->prepare($query);
 			$sth->execute();
-		
+
 			// Suppression des concepts, termes et synonymes créés ?
 		}
 	}
@@ -470,10 +472,11 @@
 	$u = new Utilisateur('Manu');
 	
 	//$u->creerTerme('Pokemon', 'creature pouvant evoluer', "");
+	//$u->creerTerme('Dresseur', 'Eleveur de pokemon', "Pokemon");
 	//$u->creerSynonyme('Poke', 'Pokemon');
 	
-	//$u->supprimerSynonyme('Poke');
-	//$u->supprimerConcept('Concept poke');
+	//$u->supprimerSynonyme('syn');
+	//$u->supprimerTerme('Pokemon');
 	
 	//$u->supprimerCompte();
 	

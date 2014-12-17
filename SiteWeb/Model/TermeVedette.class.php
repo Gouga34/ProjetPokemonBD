@@ -69,6 +69,20 @@ permettant de traiter la table TermeVedette.
 			
 			return($concept->getFils());
 		}
+		
+		/**
+		*@return la liste des synonymes du termeVedette this
+		*/
+		public function avoirListeSynonymes(){
+			$pdo = ConnexionBD::getPDO();
+			$query="SELECT deref(VALUE(listeSynonymes)).nomSynonyme FROM TermeVedette t, TABLE(t.synonymes) listeSynonymes WHERE t.nomTerme = '".$this->nomTerme."'";
+			$res = $pdo->prepare($query);
+			$res->execute();
+			$row=$res->fetchAll(PDO::FETCH_ASSOC);
+			return $row;
+		}
+		
+		
 	
 	}
 

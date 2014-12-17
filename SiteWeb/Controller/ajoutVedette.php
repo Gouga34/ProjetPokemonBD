@@ -7,7 +7,7 @@
 
 	// Description du concept en + ?
 	
-	$u->creerTerme($_POST['nomTerme'], $_POST['description']);
+	$u->creerTerme($_POST['nomTerme'], $_POST['description'], $_POST['nomParent']);
 
 
 	include_once('../View/vedetteAjoutee.php');

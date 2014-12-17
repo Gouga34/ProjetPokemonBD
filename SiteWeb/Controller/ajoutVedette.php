@@ -5,15 +5,13 @@
 
 	$u = new Utilisateur($_SESSION['login']);
 
+	// Description du concept en + ?
+	
 	$u->creerTerme($_POST['nomTerme'], $_POST['description']);
-
-	$nomConcept = $_POST['nomTerme'];		// Différent ?
-	$descriptionConcept = $_POST['description'];
-
-	$u->creerConcept($nomConcept, $descriptionConcept, $_POST['parent'], $_POST['nomTerme']);
 
 
 	include_once('../View/vedetteAjoutee.php');
 	
 	// Footer
 ?>
+

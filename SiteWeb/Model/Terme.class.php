@@ -13,15 +13,14 @@ Ce fichier contient l'implémentation des fonctions de la classe Terme.
 // modifier parent + verif requete
 
 	class Terme{
+
+		private $nomTerme;
+		private $description;
 		
-		private $idTerme
-		private $nomTerme
-		private $description
-		
-		public function_construct($nom, $desc){
+		public function Terme ($nom , $desc){
 			
 			$this->nomTerme = $nom;
-			$this->description = $descrip;
+			$this->description = $desc;
 		}
 	
 		public function getNomterme()
@@ -38,7 +37,7 @@ Ce fichier contient l'implémentation des fonctions de la classe Terme.
 		 
 		$pdo = ConnexionBD::getPDO();
 		
-		$query = "UPDATE TermeVedette SET description='".$desc."' WHERE idTerme='".$this->idTerme."';";
+		$query = "UPDATE TermeVedette SET description='".$desc."' WHERE nomTerme='".$this->nom."';";
 		
 		$sth = $pdo->prepare($query);
 		
@@ -46,17 +45,11 @@ Ce fichier contient l'implémentation des fonctions de la classe Terme.
 		
 		}
 		
-		public function modifierParent($nom, $desc){
-		
-		
-		
-		}
-		
 		public function modifierNomTerme($nom){
 		
 		$pdo = ConnexionBD::getPDO();
 		
-		$query = "UPDATE TermeVedette SET nom='".$nom."' WHERE idTerme='".$this->idTerme."';";
+		$query = "UPDATE TermeVedette SET nom='".$nom."' WHERE nomTerme='".$this->nom."';";
 		
 		$sth = $pdo->prepare($query);
 		
@@ -68,7 +61,7 @@ Ce fichier contient l'implémentation des fonctions de la classe Terme.
 		
 		$pdo = ConnexionBD::getPDO();
 		
-    	$query = "SELECT deref(VALUE(listeFils)) FROM terme t, TABLE(t.fils) listeFils WHERE t.idTerme = '".$this->idTerme."';";
+    	$query = "SELECT deref(VALUE(listeFils)) FROM terme t, TABLE(t.fils) listeFils WHERE t.nomTerme = '".$this->nom."';";
     	
     	$sth = $pdo->prepare($query);
 		
@@ -79,4 +72,4 @@ Ce fichier contient l'implémentation des fonctions de la classe Terme.
 	}
 
 
-<?
+?>

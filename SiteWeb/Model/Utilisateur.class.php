@@ -33,7 +33,8 @@
 
 			$ssh = $pdo->prepare($query);
 			$ssh->execute();
-			
+
+
 			if ($row = $ssh->fetch())
 			{
 				$this->login = $login;
@@ -369,15 +370,6 @@
 			
 			$sth = $pdo->prepare($query);
 			$sth->execute();
-			
-			// Suppression du terme vedette associé
-			$sth = $pdo->prepare("SELECT DEREF(vedette).nomTerme FROM Concept WHERE nomConcept = '".$nomConcept."'");
-			$sth->execute();
-
-			if ($row = $sth->fetch()) {
-				$nomTerme = $row['DEREF(VEDETTE).NOMTERME'];
-				supprimerTerme($nomTerme);
-			}
 		}
 
 		/**
@@ -410,7 +402,18 @@
 			{
 				supprimerSynonyme($row['DEREF(VALUE(LISTESYNONYMES)).NOMSYNONYME']);
 			}
+			
+			
+			// Suppression du concept associé
+			$query = "SELECT c.nomConcept FROM Concept c WHERE c.vedette = (SELECT ref(t) FROM TermeVedette t WHERE t.nomTerme = '".$nomTerme."')";
+			
+			$sth = $pdo->prepare($query);
+			$sth->execute();
 
+			if ($row = $sth->fetch()) {
+				$nomConcept = $row['NOMCONCEPT'];
+				supprimerConcept($nomConcept);
+			}
 
 			$query = "DELETE FROM TermeVedette WHERE nomTerme = '".$nomTerme;"'";
 			$sth = $pdo->prepare($query);
@@ -464,7 +467,7 @@
 		}
 	}
 	
-	$u = new Utilisateur('Falindir');
+	$u = new Utilisateur('Manu');
 	
 	//$u->creerTerme('Pokemon', 'creature pouvant evoluer', "");
 	//$u->creerSynonyme('Poke', 'Pokemon');

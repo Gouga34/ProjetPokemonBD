@@ -1,4 +1,7 @@
 <?php
+	
+	require("./connexionBD.php");
+	
 	/**
 	*
 	* @author Chataigner manuel 
@@ -10,6 +13,7 @@
 	{
 		private $login;
 		private $mdp;
+		private $mail;
 		private $admin;
 
 		//TODO la liste des concepts et thermes
@@ -18,13 +22,25 @@
 		 * Constructeur
 		 * @param login de l'utilisateur à créer
 		*/
-		function __construct($donnees, $session)
+		function __construct($login)
 		{
+			$pdo = ConnexionBD::getPDO();
 			// TODO FAIRE VARIABLE DE SESSION
 			// TODO TOUT A REFAIRE car incorect manu
 			//$this->login = $login;
 			/**/
-			$this->login = $donnees->mail;
+			$query = "SELECT login, mdp, mail, admin FROM Utilisateur WHERE login='".$login."'";
+
+			$ssh = $pdo->prepare($query);
+			$ssh->execute();
+			
+			if ($row = $ssh->fetch())
+			{
+				$this->login = $login;
+				$this->mdp = $row['MDP'];
+				$this->mail = $row['MAIL'];
+				$this->admin = $row['ADMIN'];
+			}
 			/*$this->nom = $donnees->nom;
 			$this->prenom = $donnees->prenom;
 			$this->admin = $donnees->admin;
@@ -52,7 +68,7 @@
 
 			echo($pdo);
 
-			$query = "SELECT * FROM Utilisateur WHERE mail='".$login."'";
+			$query = "SELECT * FROM Utilisateur WHERE login='".$login."'";
 			$res = $pdo->prepare($query);
 			$ssh = $res->execute();
 			$row = $ssh->fetch();
@@ -220,22 +236,33 @@
 		{
 			$pdo = ConnexionBD::getPDO();
 
-			$query = "INSERT INTO Concept (nomConcept, description, vedette, parents, fils) VALUES ('".$nomConcept."', '".$description."',
-						(select REF(T) from TermeVedette T where nomTerme = ".$nomTerme."),
-						GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.nomConcept = ".$nomParent.")),
+			if (empty($nomParent)){
+				$query = "INSERT INTO Concept (nomConcept, description, vedette, parents, fils) VALUES ('".$nomConcept."', '".$description."',
+						(select REF(t) from TermeVedette t where t.nomTerme = '".$nomTerme."'),
+						GroupeConcept_t(),
 						GroupeConcept_t())";
+			}
+			else{
+
+				$query = "INSERT INTO Concept (nomConcept, description, vedette, parents, fils) VALUES ('".$nomConcept."', '".$description."',
+						(select REF(t) from TermeVedette t where t.nomTerme = '".$nomTerme."'),
+						GroupeConcept_t((SELECT ref(c) FROM Concept c WHERE c.nomConcept = '".$nomParent."')),
+						GroupeConcept_t())";
+			}
 			
 			$sth = $pdo->prepare($query);
 			$sth->execute();
 
+			if (!empty($nomParent))
+			{
+				// Insertion du concept dans les fils du parent
 
-			// Insertion du concept dans les fils du parent
+				$query = "INSERT INTO TABLE (SELECT fils FROM Concept WHERE nomConcept = '".$nomParent."')
+							VALUES ((SELECT ref(c) FROM Concept c WHERE c.nomConcept = '".$nomConcept."'))";
 
-			$query = "INSERT INTO TABLE (SELECT fils FROM Concept WHERE nomConcept = '".$nomParent."')
-						VALUES ((SELECT ref(c) FROM Concept c WHERE c.nomConcept = '".$nomConcept."'))";
-
-			$sth = $pdo->prepare($query);
-			$sth->execute();
+				$sth = $pdo->prepare($query);
+				$sth->execute();
+			}
 
 			// Insertion du concept dans la table Utilisateur
 
@@ -252,12 +279,12 @@
 		 * @param description Description
 		 * @param concept Concept lié au terme vedette
 		*/
-		public function creerTerme($nomTerme, $description)
+		public function creerTerme($nomTerme, $description, $nomParent)
 		{
 			$pdo = ConnexionBD::getPDO();
 
 			$query = "INSERT INTO TermeVedette (nomTerme, description, synonymes)
-						VALUES (idTerme, '".$nomTerme."', '".$description."', GroupeSynonyme_t())";
+						VALUES ('".$nomTerme."', '".$description."', GroupeSynonyme_t())";
 
 			$sth = $pdo->prepare($query);
 			$sth->execute();
@@ -269,6 +296,12 @@
 
 			$sth = $pdo->prepare($query);
 			$sth->execute();
+			
+			$nomConcept = "Concept".$nomTerme;
+			$nomConceptParent = "Concept".$nomParent;
+			
+			// On créé automatiquement le concept associé
+			//creerConcept($nomConcept, $description, $nomConceptParent, $nomTerme);
 		}
 
 		/**
@@ -430,4 +463,17 @@
 			// Suppression des concepts, termes et synonymes créés ?
 		}
 	}
+	
+	$u = new Utilisateur('Falindir');
+	
+	//$u->creerTerme('Pokemon', 'creature pouvant evoluer', "");
+	//$u->creerSynonyme('Poke', 'Pokemon');
+	
+	//$u->supprimerSynonyme('Poke');
+	//$u->supprimerConcept('Concept poke');
+	
+	//$u->supprimerCompte();
+	
 ?>
+
+

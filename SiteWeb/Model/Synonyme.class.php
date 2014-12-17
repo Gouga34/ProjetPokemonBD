@@ -71,14 +71,14 @@
 		 * @action Change la vedette associée au synonyme
 		 * @param nomVedette Nom de la vedette associée
 		*/
-		public function modifierVedette($nomVedette)
+		/*public function ajouterVedette($nomVedette)
 		{
 			$pdo = ConnexionBD::getPDO();
 
 			// Suppression dans le tableau de la vedette actuelle (plusieurs vedettes possibles ??)
-			/*$query = "DELETE FROM TABLE (SELECT synonymes FROM TermeVedette) synonyme
+			$query = "DELETE FROM TABLE (SELECT synonymes FROM TermeVedette) synonyme
 						WHERE VALUE(synonyme) = (SELECT ref(s) FROM Synonyme s WHERE s.idSynonyme = $synonyme->getId());";
-			$pdo->query($query);*/
+			$pdo->query($query);
 
 			// Ajout du synonyme pour la nouvelle vedette
 			$query = "INSERT INTO TABLE (SELECT synonymes FROM TermeVedette WHERE nomTerme = '".$nomVedette."')
@@ -86,6 +86,6 @@
 			
 			$sth = $pdo->prepare($query);
 			$sth->execute();
-		}
+		}*/
 	}
 ?>

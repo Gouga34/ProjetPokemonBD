@@ -21,8 +21,7 @@ permettant de traiter la table Concept.
 		* Constructeur
 		* @param idSynonyme Identifiant dy synonyme à créer
 		*/
-		function __construct($nomConcept)
-		{
+		function __construct($nomConcept) {
 			$pdo = ConnexionBD::getPDO();
 			
 			$query="SELECT c.nomConcept,c.description FROM Concept c WHERE c.nomConcept='".$nomConcept."'";
@@ -39,7 +38,7 @@ permettant de traiter la table Concept.
 			$res=$pdo->prepare($query);
 			$res->execute();
 			while($row = $res->fetch()){
-				$this->nomTerme=$row['DEREF(VEDETTE).NOMTERME'];
+				$this->termeVedette=$row['DEREF(VEDETTE).NOMTERME'];
 			}
 		}
 
@@ -114,7 +113,7 @@ permettant de traiter la table Concept.
 			$res->execute();
 		}
 		
-		function trouverDansArbo($nomTerme){
+		static function trouverDansArbo($nomTerme){
 			$pdo=ConnexionBD::getPDO();
 			
 			$req="select nomConcept from concept where vedette = (select REF(t) FROM TermeVedette t WHERE t.nomTerme='".$nomTerme."')";
@@ -123,6 +122,18 @@ permettant de traiter la table Concept.
 			$res->execute();
 			$row=$res->fetchAll();
 			return $row;		
+		}
+
+
+		static function getConcepts(){
+			$pdo=ConnexionBD::getPDO();
+			
+			$req="select nomConcept from Concept";
+
+			$res=$pdo->prepare($req);
+			$res->execute();
+			$row=$res->fetchAll();
+			return $row;
 		}
 }
 	

@@ -14,7 +14,6 @@ Ce fichier contient l'implémentation des fonctions
 permettant de traiter la table TermeVedette.
 =========================================================================*/
 
-
 	class TermeVedette{
 
 		private $nomTerme;
@@ -84,6 +83,16 @@ permettant de traiter la table TermeVedette.
 		
 		
 	
+		public static function getTermes(){
+			$pdo=ConnexionBD::getPDO();
+			
+			$req="select nomTerme from TermeVedette";
+
+			$res=$pdo->prepare($req);
+			$res->execute();
+			$row=$res->fetchAll();
+			return $row;
+		}
 	}
 
 

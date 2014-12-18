@@ -1,6 +1,6 @@
 <?php
 	
-	require("./connexionBD.php");
+	//require("./connexionBD.php");
 	
 	/**
 	*
@@ -12,7 +12,7 @@
 	class Utilisateur
 	{
 		private $login;
-		private $mdp;
+		//private $mdp;
 		private $mail;
 		private $admin;
 
@@ -22,83 +22,65 @@
 		 * Constructeur
 		 * @param login de l'utilisateur à créer
 		*/
-		function __construct($login)
+		function __construct($donnees, $session)
 		{
-			$pdo = ConnexionBD::getPDO();
+			//$pdo = ConnexionBD::getPDO();
 			// TODO FAIRE VARIABLE DE SESSION
 			// TODO TOUT A REFAIRE car incorect manu
 			//$this->login = $login;
 			/**/
-			$query = "SELECT login, mdp, mail, admin FROM Utilisateur WHERE login='".$login."'";
+			//$query = "SELECT login, mdp, mail, admin FROM Utilisateur WHERE login='".$login."'";
 
-			$ssh = $pdo->prepare($query);
-			$ssh->execute();
+			//$ssh = $pdo->prepare($query);
+			//$ssh->execute();
 			
-			if ($row = $ssh->fetch())
-			{
-				$this->login = $login;
-				$this->mdp = $row['MDP'];
-				$this->mail = $row['MAIL'];
-				$this->admin = $row['ADMIN'];
+			//if ($row = $ssh->fetch())
+			//{
+				//$this->login = $login;
+				//$this->mdp = $row['MDP'];
+				//$this->mail = $row['MAIL'];
+				//$this->admin = $row['ADMIN'];
+			//}
+
+			
+
+			$this->login = $donnees['LOGIN'];
+			$this->mail = $donnees['MAIL'];
+			$this->admin = $donnees['ADMIN'];
+
+
+
+			if($session){
+				$_SESSION['login'] = $donnees['LOGIN'];
+				$_SESSION['mail'] = $donnees['MAIL'];
+				$_SESSION['admin'] = $donnees['ADMIN'];
 			}
-			/*$this->nom = $donnees->nom;
-			$this->prenom = $donnees->prenom;
-			$this->admin = $donnees->admin;
 
-			if($session){ // au cas ou on doit créer des utilisateurs : pour profil des membre par exemple
-				$_SESSION['login'] = $donnees->login;
-				$_SESSION['nom'] = $donnees->nom;
-				$_SESSION['prenom'] = $donnees->prenom;
-				$_SESSION['admin'] = $donnees->admin;
-
-				//TODO idem list des concept etc ...
-			}*/
+			//echo("tyty".$_SESSION['login']);
 		}
 
 		public function connexion() {
-			//TODO faire verif
+	
 			$login = $_POST['login'];
-			//$mdp = md5($_POST['password']);
+			$mdp = $_POST['password'];
 
-
-			// refaire la requete pour la connexion d'un user 
-			echo("888");
-		
 			$pdo = ConnexionBD::getPDO();
 
-			echo($pdo);
+			$query = "SELECT login, mail, admin FROM Utilisateur WHERE login='".$login."' AND mdp = '".$mdp."'";
 
-			$query = "SELECT * FROM Utilisateur WHERE login='".$login."'";
 			$res = $pdo->prepare($query);
-			$ssh = $res->execute();
-			$row = $ssh->fetch();
-
-			echo($row);
-
-
+			$res->execute();
+			$row = $res->fetch();
+		
 			if ($row)
 			{
-				echo($row);
-				$user = new Utilisateur($row, false);
+				$user = new Utilisateur($row, true);
+				return $user;
 			}
 			else
 			{
 				return 0;
 			}
-
-				//$pdo = ConnexionBD::getPDO();
-				//$query = "SELECT * FROM Utilisateur WHERE login = '.$login.'" AND mdp = "'.$mdp.'";
-				//$res = $pdo->query($query);
-			/*
-				if($login === 'zerocooldu30@gmail.com' && $mdp === md5('a')) { // TODO tester si la requete est vide pour le teste je verif juste si login c'est mon mail perso
-					//$user = new Utilisateur($login, false);
-					$user = new Utilisateur($login);
-					// md5($mdp);
-					return $user;
-				}
-				else {
-					return 0;
-				}*/
 		}
 
 		public function connectionSuccess() {
@@ -251,7 +233,10 @@
 			}
 
 			$sth = $pdo->prepare($query);
-			$sth->execute();
+			$res = $sth->execute();
+
+			if (!$res)
+				return false;
 
 			if (!empty($nomParent))
 			{
@@ -271,6 +256,8 @@
 			
 			$sth = $pdo->prepare($query);
 			$sth->execute();
+
+			return true;
 		}
 
 		/**
@@ -287,7 +274,10 @@
 						VALUES ('".$nomTerme."', '".$description."', GroupeSynonyme_t())";
 
 			$sth = $pdo->prepare($query);
-			$sth->execute();
+			$res = $sth->execute();
+
+			if (!$res)
+				return false;
 
 			// Insertion du terme dans la table Utilisateur
 
@@ -304,7 +294,7 @@
 			}
 			
 			// On créé automatiquement le concept associé
-			$this->creerConcept($nomConcept, $description, $nomConceptParent, $nomTerme);
+			return $this->creerConcept($nomConcept, $description, $nomConceptParent, $nomTerme);
 		}
 
 		/**
@@ -319,7 +309,10 @@
 			$query = "INSERT INTO Synonyme (nomSynonyme) VALUES ('".$nomSynonyme."')";
 			
 			$sth = $pdo->prepare($query);
-			$sth->execute();
+			$res = $sth->execute();
+
+			if (!$res)
+				return false;
 
 			// Insertion du synonyme dans la table Vedette
 
@@ -336,6 +329,8 @@
 
 			$sth = $pdo->prepare($query);
 			$sth->execute();
+
+			return true;
 		}
 
 		/**

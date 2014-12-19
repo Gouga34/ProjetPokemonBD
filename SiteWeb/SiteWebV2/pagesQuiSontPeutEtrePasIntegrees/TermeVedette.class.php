@@ -78,13 +78,7 @@ permettant de traiter la table TermeVedette.
 			$res = $pdo->prepare($query);
 			$res->execute();
 			$row=$res->fetchAll(PDO::FETCH_ASSOC);
-			$tuples;
-			$i;
-			foreach($row as $syn){
-				$tuples[$i]=new Synonyme($syn['DEREF(VALUE(LISTESYNONYMES)).NOMSYNONYME']);
-				$i++;
-			}
-			return $tuples;
+			return $row;
 		}
 		
 		
@@ -97,13 +91,7 @@ permettant de traiter la table TermeVedette.
 			$res=$pdo->prepare($req);
 			$res->execute();
 			$row=$res->fetchAll();
-			$tuples;
-			$i=0;
-			foreach($row as $terme){
-				$tuples[$i]=new TermeVedette($terme['NOMTERME']);
-				$i++;
-			}
-			return $tuples;
+			return $row;
 		}
 	}
 

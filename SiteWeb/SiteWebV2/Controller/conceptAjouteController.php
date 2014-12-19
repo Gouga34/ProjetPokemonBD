@@ -4,8 +4,15 @@
 
 	// Description du concept en + ?
 	
-	$u->creerTerme($_POST['nomTerme'], $_POST['description'], $_POST['parents']);
 
-	include_once('./View/conceptAjoute.php');
+
+	$u->creerTerme($_POST['nomTerme'], $_POST['descriptionTerme'], $_POST['parents'],$_POST['descriptionConcept']);
+	
+	
+
+	header('Location: ./index.php?page=arbre&alert=creationConceptReussi'); 
+
+	//include_once('./View/conceptAjoute.php');
 ?>
+
 

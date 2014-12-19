@@ -1,14 +1,14 @@
 
 <div class = "corp">
-<h1>Afficher liste des termes Vedettes</h1>
+<h1>liste des termes Vedettes</h1>
 <p> 
 <table>
 	<?php
-		foreach ($termesV as $termeV) 
-		{
+		for($i = 0; $i < count($termesV); $i++) 
+		{	
 			?>
 				<tr>
-					<td> <a href="#"> <?php echo $termeV['NOMTERME'] ?> </a> </td>
+					<td> <a href="#"> <?php echo $termesV[$i]->getNomTerme(); ?> </a> </td>
 				</tr>
 			<?php
 		}

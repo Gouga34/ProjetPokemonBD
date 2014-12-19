@@ -10,6 +10,5 @@
 
 <div class = "accueil">
 
-	//TODO ACCUEIL
 
 </div>

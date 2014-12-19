@@ -15,6 +15,7 @@
     public function defautAction(){
 
         require_once('./View/board.php');
+        
     }
 
     public function getAction() {

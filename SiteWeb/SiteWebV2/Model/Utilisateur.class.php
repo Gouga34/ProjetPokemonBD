@@ -12,51 +12,26 @@
 	class Utilisateur
 	{
 		private $login;
-		//private $mdp;
 		private $mail;
 		private $admin;
-
-		//TODO la liste des concepts et thermes
 		
 		/**
 		 * Constructeur
-		 * @param login de l'utilisateur à créer
+		 * @param $donnees
+		 * @param $session
 		*/
+
 		function __construct($donnees, $session)
 		{
-			//$pdo = ConnexionBD::getPDO();
-			// TODO FAIRE VARIABLE DE SESSION
-			// TODO TOUT A REFAIRE car incorect manu
-			//$this->login = $login;
-			/**/
-			//$query = "SELECT login, mdp, mail, admin FROM Utilisateur WHERE login='".$login."'";
-
-			//$ssh = $pdo->prepare($query);
-			//$ssh->execute();
-			
-			//if ($row = $ssh->fetch())
-			//{
-				//$this->login = $login;
-				//$this->mdp = $row['MDP'];
-				//$this->mail = $row['MAIL'];
-				//$this->admin = $row['ADMIN'];
-			//}
-
-			
-
 			$this->login = $donnees['LOGIN'];
 			$this->mail = $donnees['MAIL'];
 			$this->admin = $donnees['ADMIN'];
-
-
 
 			if($session){
 				$_SESSION['login'] = $donnees['LOGIN'];
 				$_SESSION['mail'] = $donnees['MAIL'];
 				$_SESSION['admin'] = $donnees['ADMIN'];
 			}
-
-			//echo("tyty".$_SESSION['login']);
 		}
 
 		public function connexion() {
@@ -75,10 +50,12 @@
 			if ($row)
 			{
 				$user = new Utilisateur($row, true);
+
 				return $user;
 			}
 			else
 			{
+
 				return 0;
 			}
 		}
@@ -105,11 +82,36 @@
 		}
 
 		public function inscription() {
+echo("inscription");
+
 			$login = $_POST['login'];
-			$mdp = md5($_POST['password']);
+			$mdp = $_POST['password'];
+			$mail = $_POST['email'];
 
-			
+			$pdo = ConnexionBD::getPDO();
 
+			$query = "INSERT INTO Utilisateur (login, mdp, mail, admin, concepts, synonymes, termes) VALUES ('".$login."', '".$mdp."', '".$mail."', 0,
+GroupeConcept_t(), GroupeSynonyme_t(), GroupeTerme_t());";
+
+			$res = $pdo->prepare($query);
+			$res->execute();
+			$row = $res->fetch();
+
+			$query = "SELECT login, mail, admin FROM Utilisateur WHERE login='".$login."' AND mdp = '".$mdp."'";
+
+			$res = $pdo->prepare($query);
+			$res->execute();
+			$row = $res->fetch();
+
+			if ($row)
+			{
+				$user = new Utilisateur($row, true);
+				return $user;
+			}
+			else
+			{
+				return 0;
+			}
 		}
 
 		public function inscriptionFailed() {
@@ -171,7 +173,14 @@
 			$sth = $pdo->prepare($query);
 			$sth->execute();
 
-			return $sth->fetchAll();
+			$row=$sth->fetchAll();
+			$tuples;
+			$i;
+			foreach($row as $c){
+				$tuples[$i]=new Concept($c['NOMCONCEPT']);
+				$i++;
+			}
+			return $tuples;
 		}
 
 		/**
@@ -188,7 +197,14 @@
 			$sth = $pdo->prepare($query);
 			$sth->execute();
 
-			return $sth->fetchAll();
+			$row=$sth->fetchAll();
+			$tuples;
+			$i=0;
+			foreach($row as $t){
+				$tuples[$i]=new TermeVedette($t['NOMTERME']);
+				$i++;
+			}
+			return $tuples;
 		}
 
 		/**
@@ -205,7 +221,14 @@
 			$sth = $pdo->prepare($query);
 			$sth->execute();
 
-			return $sth->fetchAll();
+			$row=$sth->fetchAll();
+			$tuples;
+			$i=0;
+			foreach($row as $s){
+				$tuples[i]=new Synonyme($s['NOMSYNONYME']);
+				$i++;
+			}
+			return $tuples;
 		}
 
 		/**
@@ -266,12 +289,12 @@
 		 * @param description Description
 		 * @param concept Concept lié au terme vedette
 		*/
-		public function creerTerme($nomTerme, $description, $nomParent)
+		public function creerTerme($nomTerme, $descriptionTerme, $nomParent,$descriptionConcept)
 		{
 			$pdo = ConnexionBD::getPDO();
 
 			$query = "INSERT INTO TermeVedette (nomTerme, description, synonymes)
-						VALUES ('".$nomTerme."', '".$description."', GroupeSynonyme_t())";
+						VALUES ('".$nomTerme."', '".$descriptionTerme."', GroupeSynonyme_t())";
 
 			$sth = $pdo->prepare($query);
 			$res = $sth->execute();
@@ -294,7 +317,7 @@
 			}
 			
 			// On créé automatiquement le concept associé
-			return $this->creerConcept($nomConcept, $description, $nomConceptParent, $nomTerme);
+			return $this->creerConcept($nomConcept, $descriptionConcept, $nomConceptParent, $nomTerme);
 		}
 
 		/**
@@ -464,16 +487,7 @@
 		}
 	}
 	
-	$u = new Utilisateur('Manu');
-	
-	//$u->creerTerme('Pokemon', 'creature pouvant evoluer', "");
-	//$u->creerTerme('Dresseur', 'Eleveur de pokemon', "Pokemon");
-	//$u->creerSynonyme('Poke', 'Pokemon');
-	
-	//$u->supprimerSynonyme('syn');
-	//$u->supprimerTerme('Pokemon');
-	
-	//$u->supprimerCompte();
+
 	
 ?>
 

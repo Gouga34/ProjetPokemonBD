@@ -1,14 +1,12 @@
-<div class = "corp">
-
 <h1> Ajout d'un fils à un concept </h1>
 
-<form method="post" action="./index.php?page=ajoutFils">
+<form method="post" action="./ajoutFilsController.php">
 
 	<select name="parent">
 		<?php
 			foreach($termes as $terme)
 			{
-				echo "<option>".$terme->getNomTerme()."</option>";
+				echo "<option>".$terme['NOMTERME']."</option>";
 			}
 		?>
 	</select>
@@ -17,12 +15,10 @@
 		<?php
 			foreach($termes as $terme)
 			{
-				echo "<option>".$terme->getNomTerme()."</option>";
+				echo "<option>".$terme['NOMTERME']."</option>";
 			}
 		?>
 	</select>
 
 	<input type='submit' name='create' value="Créer le fils" />
 </form>
-
-</div>

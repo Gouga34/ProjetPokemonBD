@@ -1,9 +1,5 @@
 <?php
-	//On démarre la session
 	session_start();
-	
-	//session_destroy();
-	//Appel du fichier permettant la connexion à la BD
 
 	require_once('connexionBD.php');
 
@@ -14,26 +10,24 @@
 
 	include_once('./View/headerTag.php');	 
 
-
-
-
-	//Ajout du contrôleur s'il existe et s'il est spécifié
 	if (!empty($_GET['page']) && is_file('./Controller/'.$_GET['page'].'Controller.php'))
 	{
-
 		if($_GET['page'] != 'connexion' && $_GET['page'] != 'inscription')
-		{
 			include './View/header.php';
-		}
-		else {
+		else
 			include './View/headerHome.php';
-		}
+
+			if(!empty($_GET['alert']) && $_GET['alert'] == 'creationConceptReussi')
+				echo ("Création du concept : ");
 
 		include './Controller/'.$_GET['page'].'Controller.php';
 	}
 	else
 	{
 		include './View/headerHome.php';
+
+		if(!empty($_GET['alert']) && $_GET['alert'] == 'connexionFailed')
+			echo ("Connexion Failed");
 
 		include_once './View/accueil.php';
 	}

@@ -4,11 +4,14 @@
 
 <table>
 	<?php
-		foreach ($termes as $terme) 
+		
+
+		for($i = 0; $i < count($concepts); $i++) 
 		{
+		
 			?>
 				<tr>
-					<td> <a href="#"> <?php echo $terme['NOMTERME'] ?> </a> </td>
+					<td> <a href="./index.php?page=arbre&nConcept=<?php echo $concepts[$i]->getNomConcept(); ?>"> <?php echo $concepts[$i]->getNomConcept(); ?> </a> </td>
 				</tr>
 			<?php
 		}

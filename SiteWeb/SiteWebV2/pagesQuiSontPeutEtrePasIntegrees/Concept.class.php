@@ -12,6 +12,7 @@ Ce fichier contient l'implémentation des fonctions
 permettant de traiter la table Concept.
 =========================================================================*/
 
+
 	class Concept{
 			private $nomConcept;
 			private $description;
@@ -21,7 +22,8 @@ permettant de traiter la table Concept.
 		* Constructeur
 		* @param idSynonyme Identifiant dy synonyme à créer
 		*/
-		function __construct($nomConcept) {
+		function __construct($nomConcept)
+		{
 			$pdo = ConnexionBD::getPDO();
 			
 			$query="SELECT c.nomConcept,c.description FROM Concept c WHERE c.nomConcept='".$nomConcept."'";
@@ -38,7 +40,7 @@ permettant de traiter la table Concept.
 			$res=$pdo->prepare($query);
 			$res->execute();
 			while($row = $res->fetch()){
-				$this->termeVedette=$row['DEREF(VEDETTE).NOMTERME'];
+				$this->nomTerme=$row['DEREF(VEDETTE).NOMTERME'];
 			}
 		}
 
@@ -79,14 +81,7 @@ permettant de traiter la table Concept.
 			$res->execute();
 	
 			$row =$res->fetchAll(PDO::FETCH_ASSOC);
-			$tuples;
-			$i=0;
-			foreach($row as $concept){
-				$tuples[$i]=new Concept($concept['NOMCONCEPT']);
-				$i++;
-			}
-			
-			return $tuples;
+			return $row;
 			
 		}
 		//Requête ok, mais resultat à traiter mieux
@@ -95,14 +90,8 @@ permettant de traiter la table Concept.
 			$req="select deref(value(listeFils)).nomConcept from concept c, table(c.fils) listeFils WHERE c.nomConcept='".$this->nomConcept."'";
 			$res=$pdo->prepare($req);
 			$res->execute();
-			$row =$res->fetchAll(PDO::FETCH_ASSOC);
-			$tuples;
-			$i=0;
-			foreach($row as $concept){
-				$tuples[$i]=new Concept($concept['NOMCONCEPT']);
-				$i++;
-			}
-			return $tuples;
+			$row =$res->fetchAll();
+			return $row;
 		}
 		
 		/**
@@ -134,13 +123,7 @@ permettant de traiter la table Concept.
 			$res=$pdo->prepare($req);
 			$res->execute();
 			$row=$res->fetchAll();
-			$tuples;
-			$i=0;
-			foreach($row as $concept){
-				$tuples[$i]=new Concept($concept['NOMCONCEPT']);
-				$i++;
-			}
-			return $tuples;		
+			return $row;		
 		}
 
 
@@ -152,13 +135,7 @@ permettant de traiter la table Concept.
 			$res=$pdo->prepare($req);
 			$res->execute();
 			$row=$res->fetchAll();
-			$tuples;
-			$i=0;
-			foreach($row as $concept){
-				$tuples[$i]=new Concept($concept['NOMCONCEPT']);
-				$i++;
-			}
-			return $tuples;
+			return $row;
 		}
 }
 	

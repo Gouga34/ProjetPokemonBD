@@ -8,5 +8,10 @@
 
 	$resultConnexion = Utilisateur::connexion();
 
-	include_once('./View/board.php');
+	if($resultConnexion == 0) {
+		header('Location: ./index.php?alert=connexionFailed'); 
+	}
+	else {
+		header('Location: ./index.php?page=board'); 
+	}
 ?>

@@ -5,7 +5,7 @@
 
 <form method="post" action="./index.php?page=trouverConcept">
 
-	<input type='text' name='concept' required />
+	<input type='text' name='concept' required autocomplete="off"/>
 
 	<input type='submit' name='find' value="Rechercher" />
 </form>

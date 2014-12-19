@@ -5,7 +5,7 @@
 <p>  <?php 
 
 	foreach($concept as $c){
-		echo "<br/><a href=\"#\">".$c['NOMCONCEPT']."</a>";
+		echo "<br/><a href=\"./index.php?page=arbre&nConcept=".$c->getNomConcept()."\">".$c->getNomConcept()."</a>";
 	}
 	 ?>  </p>
 

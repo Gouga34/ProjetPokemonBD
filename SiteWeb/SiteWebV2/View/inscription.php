@@ -10,8 +10,8 @@
 <div class = "inscription">
 
 
-        <form action="index.php" method="post">
-       
+        <form action="./index.php?page=inscriptionUser" method="post">
+    
             <table>
            
             <tr>
@@ -30,7 +30,7 @@
             </tr>
            	<tr>
            	<td><label for="ConfirmPassword"><strong>Confirmer mot de passe :</strong></label></td>
-            <td><input type="ConfirmPassword" name="ConfirmPassword" id="ConfirmPassword"/></td>
+            <td><input type="password" name="ConfirmPassword" id="ConfirmPassword"/></td>
            </td>
        		<tr>
              <td><label for="email"><strong>Email:</strong></label></td>
@@ -38,7 +38,7 @@
        		</tr>
        		       		<tr>
              <td><label for="ConfirmEmail"><strong>Confirmer email:</strong></label></td>
-            <td><input type="ConfirmEmail" name="ConfirmEmail" id="ConfirmEmail"/></td>
+            <td><input type="email" name="ConfirmEmail" id="ConfirmEmail"/></td>
        		</tr>
             
             </table>

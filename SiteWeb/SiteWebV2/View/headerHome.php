@@ -9,7 +9,7 @@
 ?>
 
 <header id="headerPokesaurus">
-		<a href="./index.php?page=accueil"><img id="logo" src="" alt="logo Pokesaurus"/></a>
+		<a href="./index.php?page=accueil"><img id="logo" src="./View/logoBDD.png" alt="logo Pokesaurus"/></a>
 			<ul id="menu">
 				
 			</ul>

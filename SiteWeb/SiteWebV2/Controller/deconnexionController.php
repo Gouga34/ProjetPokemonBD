@@ -8,5 +8,5 @@
 
 	session_destroy();
 	
-	include_once('./View/index.php');
+	header('Location: index.php'); 
 ?>

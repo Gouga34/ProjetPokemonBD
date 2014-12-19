@@ -1,15 +1,14 @@
-*{
+html, body {
 	margin: 0;
 	padding: 0;
-	
 }
+
 
 /*HEADER*/
 
 #headerPokesaurus{
 	/*background-image:linear-gradient(to right, rgb(102,204,204)/*#87AADE,#AAEEFF );*/
 	background-image:linear-gradient(to right, #80B3FF,#D5F6FF );
-
 	/*background: #92b2ee url(images/bg_header.jpg) right top no-repeat;*/
 	width: 100%;
 	height: 180px;
@@ -19,8 +18,8 @@
 
 /*LOGO*/
 #logo { 
-	height:100px; 
-	width: 100px;
+	height:125px; 
+	width: 125px;
 	display:block;
 	float:left;
 	margin-top: 30px;
@@ -141,3 +140,4 @@ ul#mini_menu {
 .corp {
 	margin-top: 60px;
 }
+

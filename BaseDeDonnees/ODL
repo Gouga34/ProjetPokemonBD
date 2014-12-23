@@ -8,47 +8,28 @@ class Utilisateur
 	relationship Set<Terme> possede inverse Terme::estPossedePar;
 	relationship Set<Concept> possede inverse Concept::estPossedePar;
 	relationship Set<Synonyme> possede inverse Synonyme::estPossedePar;
-	
-	void creerConcept(in Vedette v);
-	void creerTerme(in Terme termeParent);
-	void creerSynonyme(in Vedette v);
-	
-	void supprimerConcept(in Concept c);
-	void supprimerTerme(in Terme t);
-	void supprimerSynonyme(in Synonyme s);
-	
-	void supprimerCompte();
 };
 
 class Terme{
 
-  attribute int idTerme
 	attribute string nomTerme;
 	attribute string description;
 
 	relationship Utilisateur estPossedePar inverse Utilisateur::possede;
 	relationship Set<Synonyme> aPourSynonyme inverse Synonyme::estSynonyme;
 	relationship Concept designe inverse Concept::estDesigne;
-	
-	void modifierDescription(in string desc);
-  void modifierNomTerme(in string nom);
-  void ajouterSynonyme(in Synonyme s);
 };
 
 class Synonyme{
 
-	attribute int idSynonyme;
 	attribute string nomSynonyme;
 	
 	relationship Vedette estSynonyme inverse Vedette::aPourSynonyme;
 	relationship Utilisateur estPossedePar inverse Utilisateur::possede;
-	
-	void modifierVedette(in Vedette v);
 };
 
 class Concept
 {
-  attribute int idConcept;
 	attribute string nomConcept;
 	attribute string description;
 	
@@ -56,20 +37,6 @@ class Concept
 	relationship Set<Concept> aPourParent inverse estParent;
 	relationship Utilisateur estPossedePar inverse Utilisateur::possede;
 	relationship Vedette estDesigne inverse Vedette::designe;
-	
-	void ajouter(in Terme t);
-	bool trouver(in Terme t);
-	void retirer(in Terme t);
-	
-	void modifierDescription(in string desc);
-	void modifierNomConcept(in string nom);
-	
-	void modifierParent(in Concept c);
-	void ajouterParent(in Concept c);
-	void ajouterFils(in Concept c);
-	
-	Set<Concept> avoirFils();	
-	Set<Concept> avoirParents();
 };
 
 
